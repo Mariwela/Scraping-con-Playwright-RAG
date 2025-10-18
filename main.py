@@ -1,6 +1,5 @@
 from scraper import scrape_medal_table
-from vector_db import create_vector_db
-from process_data import query_vector_db
+from vector_db import create_vector_db, query_vector_db
 from rag import run_rag
 
 def main():
@@ -13,17 +12,14 @@ def main():
     print(df.head())
 
     print("\n💾 Creando base de datos vectorial...")
-    collection = create_vector_db(df)
+    collection, df_clean = create_vector_db(df)
 
     print("\n🔍 Consultas de ejemplo:")
-    query_vector_db(collection, "¿Qué país ganó más medallas de oro?")
-    query_vector_db(collection, "¿Qué nación obtuvo más medallas totales?")
+    query_vector_db(collection, "¿Qué país ganó más medallas de oro?", df_clean)
+    query_vector_db(collection, "¿Qué nación obtuvo más medallas totales?", df_clean)
 
-    print("\n🧠 Ejecutando RAG:")
     pregunta = "¿Qué país ganó más oros?"
-    run_rag(pregunta, collection, df)
+    run_rag(pregunta, collection, df_clean)
 
 if __name__ == "__main__":
     main()
-
-

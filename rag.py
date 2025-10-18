@@ -17,7 +17,7 @@ def clean_country_name(name):
     """Limpia símbolos como ‡, *, †."""
     return re.sub(r"[‡*†]", "", str(name)).strip()
 
-def run_rag(query, collection, df=None):
+def run_rag(query, collection, df):
     """
     Ejecuta un flujo RAG mejorado:
     - Usa ChromaDB para cumplir el pipeline.
