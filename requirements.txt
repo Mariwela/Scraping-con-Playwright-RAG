@@ -1,0 +1,7 @@
+playwright
+bs4
+pandas
+chromadb
+openai
+tiktoken
+python-dotenv
