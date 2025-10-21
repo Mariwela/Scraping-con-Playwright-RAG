@@ -1,5 +1,15 @@
 # Scraping-con-Playwright-RAG
 Scraping de una página de Juegos Olýmpicos, almacena esta información en una base de datos vectorial (ChromaDB) y usa RAG para dar respuestas sobre los rankings de medallas
+
+Primero creamos un entorno virtual:
+python -m venv venv
+venv\Scripts\activate
+
+Luego instalamos dependencias:
+pip install playwright bs4 pandas chromadb openai tiktoken
+playwright install
+
+
 ## 1. EXTRACCIÓN DE DATOS - scraper.py
 https://en.wikipedia.org/wiki/2024_Summer_Olympics_medal_table
 Utiliza la biblioteca playwright para abrir una instancia de navegador (headless) y navegar a la página de la tabla de medallas de los Juegos Olímpicos de Verano 2024 en Wikipedia.
