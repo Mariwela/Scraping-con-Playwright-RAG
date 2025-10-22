@@ -53,3 +53,14 @@ Orquesta todas las operaciones: obtiene los datos, crea la base de datos vectori
 
 ## 5. process_data.py
 Muestra los resultados de la consulta semántica en ChromaDB sin la lógica de ordenar el DataFrame por tipo de medalla.
+
+## 6. TOOLS - tools.py
+Contiene un conjunto de funciones "tools" que llaman a APIs externas y devuelven resultados sencillos para enriquecer respuestas.
+
+## 7. INTERFAZ - gradio_app.py
+Se ha añadido una interfaz web con Gradio para interactuar con el flujo RAG y las tools.
+
+- La app scrapea la tabla, crea la colección vectorial y expone una caja de texto para consultas.
+- Permite seleccionar una tool (NewsAPI u OpenWeather) y un campo de entrada para el parámetro de la tool (por ejemplo, la ciudad para OpenWeather).
+- Devuelve la respuesta RAG (resumen generado a partir de los datos) y el resultado de la tool seleccionada.
+

@@ -78,4 +78,6 @@ def run_rag(query, collection, df):
     print("\n🧾 Resumen generado:")
     print(summary)
 
+    # Nota: el post-procesado con un LLM externo fue removido por decisión del proyecto.
+    # Devolver solo el resumen generado a partir de los datos.
     return summary

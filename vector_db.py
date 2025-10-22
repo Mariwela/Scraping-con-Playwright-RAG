@@ -24,27 +24,12 @@ def create_vector_db(df):
     for col in ["Gold", "Silver", "Bronze", "Total"]:
         df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0).astype(int)
 
-    # Inicializar Chroma y embeddings
-    api_key = os.getenv("OPENAI_API_KEY")
+    # Inicializar Chroma y forzar embeddings locales (SentenceTransformer)
     chroma_client = chromadb.Client()
-
-    if api_key:
-        try:
-            print("🔗 Probando OpenAI embeddings...")
-            embedding_fn = embedding_functions.OpenAIEmbeddingFunction(api_key=api_key)
-            embedding_fn(input=["test"])  # prueba de cuota
-            print("✅ OpenAI embeddings disponibles.")
-        except Exception as e:
-            print(f"⚠️ Error al usar OpenAI ({e})")
-            print("💻 Cambiando a modelo local (SentenceTransformer)...")
-            embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
-                model_name="all-MiniLM-L6-v2"
-            )
-    else:
-        print("💻 Usando modelo local (SentenceTransformer)...")
-        embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
-            model_name="all-MiniLM-L6-v2"
-        )
+    print("� Forzando uso de modelo local (SentenceTransformer) para embeddings...")
+    embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
+        model_name="all-MiniLM-L6-v2"
+    )
 
     # Crear colección en Chroma
     collection = chroma_client.get_or_create_collection(
