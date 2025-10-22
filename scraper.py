@@ -1,6 +1,7 @@
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 import pandas as pd
+from io import StringIO
 
 def scrape_medal_table():
     """Hace scraping de la tabla de medallas de Wikipedia (Juegos Olímpicos 2024)"""
@@ -18,7 +19,9 @@ def scrape_medal_table():
 
     # Buscar la tabla de medallas
     table = soup.find("table", {"class": "wikitable"})
-    df = pd.read_html(str(table))[0]
+    # pd.read_html will deprecate passing a literal HTML string in the future.
+    # Wrap the HTML in a StringIO to keep compatibility.
+    df = pd.read_html(StringIO(str(table)))[0]
 
     # Normalizar nombres de columnas
     df.columns = ["Rank", "Nation", "Gold", "Silver", "Bronze", "Total"]
