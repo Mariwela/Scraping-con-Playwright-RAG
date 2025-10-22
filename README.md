@@ -9,7 +9,7 @@ Primero creamos un entorno virtual:
 
 Luego instalamos dependencias:
 
-  pip install playwright bs4 pandas chromadb openai tiktoken
+  pip install playwright bs4 pandas chromadb
 
   playwright install
 
@@ -29,11 +29,9 @@ Normaliza las columnas a ["Rank", "Nation", "Gold", "Silver", "Bronze", "Total"]
 ## 2. ALMACENAMIENTO VECTORIAL - vector_db.py
 Limpia el DataFrame de pandas de símbolos especiales y convierte las columnas de medallas y Rank a tipos de datos enteros.
 
-Embeddings: Configura la función de embedding para convertir el texto en vectores:
+Embeddings: Configura la función de embedding para convertir el texto en vectores.
 
-Intenta usar la función de embedding de OpenAI si la clave API está disponible.
-
-Si falla o la clave no está, usa un modelo de lenguaje local con SentenceTransformerEmbeddingFunction.
+El proyecto usa por defecto embeddings locales con SentenceTransformers. Si quieres integrar embeddings externos, adapta `vector_db.py`.
 
 Crea una colección llamada "olympic_medals" en ChromaDB.
 
@@ -63,4 +61,3 @@ Se ha añadido una interfaz web con Gradio para interactuar con el flujo RAG y l
 - La app scrapea la tabla, crea la colección vectorial y expone una caja de texto para consultas.
 - Permite seleccionar una tool (NewsAPI u OpenWeather) y un campo de entrada para el parámetro de la tool (por ejemplo, la ciudad para OpenWeather).
 - Devuelve la respuesta RAG (resumen generado a partir de los datos) y el resultado de la tool seleccionada.
-

@@ -75,6 +75,25 @@ def run_rag(query, collection, df):
         f"Entre los países destacados también se encuentran {destacados}."
     )
 
+    # --- Si la consulta pregunta por un país específico, devolver sus cifras exactas ---
+    q_lower = query.lower()
+    # Buscar coincidencias de país (comprobación simple, mayúsculas/minúsculas ignoradas)
+    for _, row in df.iterrows():
+        nation_clean = clean_country_name(row["Nation"]).lower()
+        if nation_clean and nation_clean in q_lower:
+            # Encontrado país en la consulta -> devolver conteo específico
+            g = int(row["Gold"])
+            s = int(row["Silver"])
+            b = int(row["Bronze"])
+            t = int(row["Total"])
+            rank = int(row.get("Rank", -1)) if "Rank" in row else -1
+            rank_text = f" Ocupa la posición {rank} en el ranking." if rank != -1 else ""
+            country_summary = (
+                f"{clean_country_name(row['Nation'])} tiene {g} oros, {s} platas y {b} bronces (Total: {t})."
+                + rank_text
+            )
+            return country_summary
+
     print("\n🧾 Resumen generado:")
     print(summary)
 

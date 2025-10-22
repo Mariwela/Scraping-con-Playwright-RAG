@@ -3,7 +3,8 @@ import gradio as gr
 from vector_db import create_vector_db, query_vector_db
 from scraper import scrape_medal_table
 from rag import run_rag
-from tools import newsapi_top_headlines, openweather_current
+from agent import answer_with_agent
+import os
 
 
 def setup():
@@ -15,29 +16,26 @@ def setup():
 collection, df_clean = setup()
 
 
-def answer(query: str, tool: str, tool_input: str):
-    # run rag
+def answer(query: str):
+    # If GOOGLE_API_KEY is present, use the Gemini agent which may call tools.
+    if os.getenv("GOOGLE_API_KEY"):
+        final, history = answer_with_agent(query, collection, df_clean)
+        hist_text = "\n\n".join([f"{h['tool']}({h['param']}): {h['result']}" for h in history])
+        return final, hist_text
+
+    # fallback: only run RAG
     rag_answer = run_rag(query, collection, df_clean)
-
-    tool_result = None
-    if tool == "NewsAPI":
-        tool_result = newsapi_top_headlines(os.getenv("NEWSAPI_KEY"), tool_input or query)
-    elif tool == "OpenWeather":
-        tool_result = openweather_current(os.getenv("OPENWEATHER_KEY"), tool_input or "Madrid")
-
-    return rag_answer, str(tool_result)
+    return rag_answer, "(No GOOGLE_API_KEY set; tools no disponibles)"
 
 
 with gr.Blocks() as demo:
     gr.Markdown("# RAG + Tools demo")
     with gr.Row():
         query_in = gr.Textbox(label="Consulta")
-        tool_sel = gr.Dropdown(choices=["None", "NewsAPI", "OpenWeather"], value="None", label="Tool")
-        tool_input = gr.Textbox(label="Tool input (ej: ciudad o tema)")
-    out_rag = gr.Textbox(label="RAG respuesta")
+    out_rag = gr.Textbox(label="RAG respuesta", lines=12)
     out_tool = gr.Textbox(label="Tool output")
     btn = gr.Button("Enviar")
-    btn.click(answer, inputs=[query_in, tool_sel, tool_input], outputs=[out_rag, out_tool])
+    btn.click(answer, inputs=[query_in], outputs=[out_rag, out_tool])
 
 
 def main():

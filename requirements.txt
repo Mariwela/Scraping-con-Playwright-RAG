@@ -2,7 +2,6 @@ playwright
 bs4
 pandas
 chromadb
-tiktoken
 python-dotenv
 sentence_transformers
 gradio
