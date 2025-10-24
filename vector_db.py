@@ -26,7 +26,7 @@ def create_vector_db(df):
 
     # Inicializar Chroma y forzar embeddings locales (SentenceTransformer)
     chroma_client = chromadb.Client()
-    print("� Forzando uso de modelo local (SentenceTransformer) para embeddings...")
+    print("Forzando uso de modelo local (SentenceTransformer) para embeddings...")
     embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
         model_name="all-MiniLM-L6-v2"
     )
